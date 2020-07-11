@@ -71,7 +71,7 @@
             </#list>
         <#else >
             <tr>
-                <td colspan="" align="center" style="color: red; font-family: 楷体;">对不起，没有入库信息！</td>
+                <td colspan="7" align="center" style="color: red; font-family: 楷体;">对不起，没有出库信息！</td>
             </tr>
         </#if>
         <tr>

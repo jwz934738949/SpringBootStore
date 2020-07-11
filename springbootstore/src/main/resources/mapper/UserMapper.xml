@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.sdut.springbootstore.mapper.UserMapper">
+    <select id="queryUsers" parameterType="User" resultType="User">
+        select * from user
+        <where>
+            <if test="username != null and username != ''">
+                and username like concat("%", #{username}, "%")
+            </if>
+            <if test="userroles != null and userroles != ''">
+                and userroles = #{userroles}
+            </if>
+        </where>
+        order by userid desc
+    </select>
+    <select id="login" parameterType="User" resultType="User">
+        select * from user where username = #{username} and password = #{password}
+    </select>
+    <select id="queryUserById" parameterType="int" resultType="User">
+        select * from user where userid = #{userid}
+    </select>
+    <select id="queryUserByUsername" parameterType="String" resultType="User">
+        select * from user where username = #{username}
+    </select>
+    <insert id="addUser" parameterType="User">
+        insert into user values(null, #{username}, #{password}, #{userroles}, NOW())
+    </insert>
+    <update id="updateUser" parameterType="User">
+        update user
+        <set>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="userroles != null and userroles != ''">
+                userroles = #{userroles},
+            </if>
+        </set>
+        where userid = #{userid}
+    </update>
+    <delete id="deleteUser" parameterType="int">
+        delete from user where userid = #{userid}
+    </delete>
+</mapper>

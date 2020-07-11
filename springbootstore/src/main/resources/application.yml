@@ -1,0 +1,27 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: springbootstore
+  freemarker:
+    suffix: .ftlh
+    settings:
+      number_format: 0.##
+    cache: false
+    charset: utf-8
+    content-type: text/html;charset=utf-8
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/store
+    username: root
+    password: root
+mybatis:
+  mapper-locations: mapper/*.xml
+  type-aliases-package: cn.edu.sdut.springbootstore.entity
+logging:
+  level:
+    cn:
+      edu:
+        sdut:
+          springbootstore:
+            mapper: debug

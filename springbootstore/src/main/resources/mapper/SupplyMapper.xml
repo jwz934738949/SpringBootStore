@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.sdut.springbootstore.mapper.SupplyMapper">
+    <select id="querySupplys" parameterType="Supply" resultType="Supply">
+        select * from supply
+        <where>
+            <if test="supname != null and supname !=''">
+                and supname like concat("%", #{supname}, "%")
+            </if>
+        </where>
+        order by supid desc
+    </select>
+    <select id="querySupid" resultType="int">
+        select supid from supply
+    </select>
+    <select id="querySupplyById" parameterType="int" resultType="Supply">
+        select * from supply where supid = #{supid}
+    </select>
+    <select id="querySupplyByName" parameterType="String" resultType="Supply">
+        select * from supply where supname = #{supname}
+    </select>
+    <insert id="addSupply" parameterType="Supply">
+        insert into supply values(null, #{supname}, #{supaddress}, #{suptel})
+    </insert>
+    <update id="updateSupply" parameterType="Supply">
+        update supply
+        <set>
+           <if test="supname != null and supname != ''">
+               supname = #{supname},
+           </if>
+           <if test="supaddress != null and supaddress != ''">
+               supaddress = #{supaddress},
+           </if>
+           <if test="suptel != null and suptel != ''">
+               suptel = #{suptel},
+           </if>
+        </set>
+        where supid = #{supid}
+    </update>
+    <delete id="deleteSupply" parameterType="int">
+        delete from supply where supid = #{supid}
+    </delete>
+    <select id="querySupplyByPurid" parameterType="int" resultType="Supply">
+        select * from supply where supid in (
+            select supid from purchase
+            where purid = #{purid}
+        )
+    </select>
+</mapper>

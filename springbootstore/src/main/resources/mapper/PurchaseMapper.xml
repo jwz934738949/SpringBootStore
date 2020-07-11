@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.sdut.springbootstore.mapper.PurchaseMapper">
+    <resultMap id="purchaseMap" type="Purchase" autoMapping="true">
+        <id property="purid" column="purid"></id>
+        <collection property="goods" resultMap="goodsMap"></collection>
+        <collection property="supply" resultMap="supplyMap"></collection>
+    </resultMap>
+    <resultMap id="goodsMap" type="goods" autoMapping="true">
+        <id column="goodsid" property="goodsid"></id>
+    </resultMap>
+    <resultMap id="supplyMap" type="supply" autoMapping="true">
+        <id column="supid" property="supid"></id>
+    </resultMap>
+    <select id="queryPurchases" parameterType="Purchase" resultMap="purchaseMap">
+        select g.*, s.*, p.* from goods g, purchase p, supply s
+        where g.goodsid = p.goodsid and s.supid = p.supid
+        <if test="goods != null and goods != '' and goods.goodsid != 0">
+            and p.goodsid = #{goods.goodsid}
+        </if>
+        <if test="supply != null and supply != '' and supply.supid != 0">
+            and p.supid = #{supply.supid}
+        </if>
+        order by purid desc
+    </select>
+    <select id="queryPurchaseById" parameterType="int" resultMap="purchaseMap">
+        select * from purchase where purid = #{purid}
+    </select>
+    <insert id="addPurchase" parameterType="Purchase">
+        insert into purchase values(null, #{goods.goodsid}, #{purnum}, NOW(), #{purprice}, #{supply.supid})
+    </insert>
+    <update id="updatePurchase" parameterType="Purchase">
+        update purchase
+        <set>
+            <if test="purnum != null and purnum != ''">
+                purnum = #{purnum},
+            </if>
+            <if test="purprice != null and purprice != ''">
+                purprice = #{purprice},
+            </if>
+            <if test="goods != null and goods != '' and goods.goodsid != 0">
+                goodsid = #{goods.goodsid},
+            </if>
+            <if test="supply != null and supply != '' and supply.supid != 0">
+                supid = #{supply.supid},
+            </if>
+        </set>
+        where purid = #{purid}
+    </update>
+    <delete id="deletePurchase" parameterType="int">
+        delete from purchase where purid = #{purid}
+    </delete>
+    <delete id="deletePurchaseByGoodsid" parameterType="int">
+        delete from purchase where goodsid = #{goods.goodsid}
+    </delete>
+    <delete id="deletePruchaseBySupid" parameterType="int">
+        delete from purchase where supid = #{supply.supid}
+    </delete>
+</mapper>

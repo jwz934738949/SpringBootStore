@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.sdut.springbootstore.mapper.GoodsMapper">
+
+    <select id="queryGoods" parameterType="Goods" resultType="Goods">
+        select * from goods
+        <where>
+            <if test="goodsname != null and goodsname != ''">
+                and goodsname like concat("%", #{goodsname}, "%")
+            </if>
+            <if test="goodsid != null and goodsid != ''">
+                and goodsid = #{goodsid}
+            </if>
+            <if test="goodstype != null and goodstype !=''">
+                and goodstype = #{goodstype}
+            </if>
+        </where>
+        order by goodsid desc
+    </select>
+
+    <select id="queryGoodsid" parameterType="int" resultType="Goods">
+        select * from goods where goodsid = #{goodsid}
+    </select>
+
+    <select id="queryGoodsByPurid" parameterType="int" resultType="Goods">
+        select * from goods where goodsid in (
+            select goodsid from purchase
+            where purid = #{purid}
+        )
+    </select>
+
+    <update id="updateGoods" parameterType="Goods">
+        update goods
+        <set>
+            <if test="goodstype != null and goodstype != ''">
+                goodstype = #{goodstype},
+            </if>
+            <if test="goodsnum != null and goodsnum != ''">
+                goodsnum = #{goodsnum},
+            </if>
+        </set>
+        where goodsid = #{goodsid}
+    </update>
+
+    <insert id="addGoods" parameterType="Goods">
+        insert into goods values(null,#{goodsname},#{goodstype},NOW(),#{shelflife},#{goodsnum});
+    </insert>
+    <select id="queryGoodsBysellid" parameterType="int" resultType="Goods">
+        select * from goods where goodsid in (
+            select goodsid from sell
+            where sellid = #{sellid}
+        )
+    </select>
+    <delete id="deleteGoods" parameterType="int">
+        delete from goods where goodsid = #{goodsid}
+    </delete>
+</mapper>

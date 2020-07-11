@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.edu.sdut.springbootstore.mapper.SellMapper">
+    <resultMap id="SellMap" type="Sell" autoMapping="true">
+        <id property="sellid" column="sellid"></id>
+        <collection property="goods" resultMap="goodsMap"></collection>
+        <collection property="employee" resultMap="employeeMap"></collection>
+    </resultMap>
+    <resultMap id="goodsMap" type="Goods" autoMapping="true">
+        <id column="goodsid" property="goodsid"></id>
+    </resultMap>
+    <resultMap id="employeeMap" type="Employee" autoMapping="true">
+        <id column="empid" property="empid"></id>
+    </resultMap>
+    <select id="querySell" parameterType="Sell" resultMap="SellMap">
+        select g.*, s.*, e.* from goods g, employee e, sell s
+        where g.goodsid = s.goodsid and s.empid = e.empid
+        <if test="goods != null and goods != '' and goods.goodsid != 0">
+            and g.goodsid = #{goods.goodsid}
+        </if>
+        <if test="employee != null and employee != '' and employee.empid != 0">
+            and e.empid = #{employee.empid}
+        </if>
+        order by sellid desc
+
+    </select>
+
+    <select id="querySellid" parameterType="int" resultMap="SellMap">
+        select * from Sell where sellid = #{sellid}
+    </select>
+
+    <update id="updatesell" parameterType="Sell">
+        update sell
+        <set>
+            <if test="sellnum != null and sellnum != ''">
+                sellnum = #{sellnum},
+            </if>
+            <if test="sellprice != null and sellprice != ''">
+                sellprice = #{sellprice},
+            </if>
+            <if test="goods != null and goods != '' and goods.goodsid != 0">
+                goodsid = #{goods.goodsid},
+            </if>
+            <if test="employee != null and employee != '' and employee.empid != 0">
+                empid = #{employee.empid},
+            </if>
+        </set>
+        where sellid = #{sellid}
+    </update>
+    <insert id="addSell" parameterType="Sell">
+        insert into sell values (null ,#{goods.goodsid},#{sellnum},NOW(),#{sellprice},#{employee.empid})
+    </insert>
+    <delete id="deleteSell" parameterType="int">
+        delete from sell where sellid = #{sellid}
+    </delete>
+    <delete id="deleteSellByEmpid" parameterType="int">
+        delete from sell where empid = #{employee.empid}
+    </delete>
+    <delete id="deleteSellByGoodsid" parameterType="int">
+        delete from sell where goodsid = #{goods.goodsid}
+    </delete>
+</mapper>

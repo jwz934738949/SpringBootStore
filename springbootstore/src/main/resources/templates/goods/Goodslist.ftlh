@@ -63,7 +63,7 @@
                     <td>
                         <a href="/detailGoods?goodsid=${good.goodsid}" class="btn btn-outline-primary">查看</a>
                         <a href="/toupdateGoods?goodsid=${good.goodsid}" class="btn btn-outline-primary">修改</a>
-                        <a href="/deleteGoods?userid=${good.goodsid}" onclick="return confirm('是否确认删除该信息？')"
+                        <a href="/deleteGoods?goodsid=${good.goodsid}" onclick="return confirm('是否确认删除该信息？')"
                            class="btn btn-outline-primary">删除</a>
                     </td>
                 </tr>

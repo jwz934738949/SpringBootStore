@@ -13,7 +13,7 @@
         <input type="text" name="username" class="form-control">
       </td>
       <td>
-        <span id="ajaxUsername"></span>
+        <span id="ajaxUsername" style="color: red; font-family: 楷体;"></span>
       </td>
     </tr>
     <tr>
